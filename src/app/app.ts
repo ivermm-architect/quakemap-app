@@ -74,6 +74,31 @@ export class App {
     return { count: list.length, maxMag };
   });
 
+  /** Umbral de magnitud considerada significativa para la alerta del sistema. */
+  private readonly ALERT_MAG = 6;
+
+  /** Sismos significativos (M ≥ 6) dentro de los resultados filtrados. */
+  protected readonly significant = computed(() =>
+    this.filtered().filter((q) => q.magnitude >= this.ALERT_MAG),
+  );
+
+  /** El sismo significativo más fuerte (para el texto de la alerta). */
+  protected readonly topAlert = computed(() => {
+    const list = this.significant();
+    return list.reduce<Quake | null>(
+      (max, q) => (!max || q.magnitude > max.magnitude ? q : max),
+      null,
+    );
+  });
+
+  /** Permite cerrar la alerta manualmente (se reinicia al recargar datos). */
+  protected readonly alertDismissed = signal(false);
+
+  /** Muestra la alerta si hay sismos significativos y no se cerró. */
+  protected readonly showAlert = computed(
+    () => !this.alertDismissed() && this.significant().length > 0,
+  );
+
   constructor() {
     // Recarga los datos cuando cambia el rango (solo con sesión iniciada).
     effect((onCleanup) => {
@@ -86,6 +111,7 @@ export class App {
         next: (quakes) => {
           this.quakes.set(quakes);
           this.selectedId.set(null);
+          this.alertDismissed.set(false);
           this.loading.set(false);
         },
         error: () => {
@@ -101,6 +127,11 @@ export class App {
 
   protected onSelect(id: string): void {
     this.selectedId.set(id);
+  }
+
+  /** Cierra la alerta del sistema hasta la próxima recarga de datos. */
+  protected dismissAlert(): void {
+    this.alertDismissed.set(true);
   }
 
   protected toggleMenu(event: MouseEvent): void {

@@ -151,6 +151,63 @@
       </div>
     </header>
 
+    <!-- ============ Alerta de sistema (sismos M ≥ 6) ============ -->
+    @if (showAlert()) {
+      <div
+        role="alert"
+        aria-live="assertive"
+        class="relative z-20 flex items-center gap-3 border-b border-red-500/50 bg-red-500/15 px-4 py-2.5 text-red-100 sm:px-6"
+      >
+        <span
+          class="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-red-500/25"
+          aria-hidden="true"
+        >
+          <span class="absolute h-2 w-2 animate-ping rounded-full bg-red-400"></span>
+          <svg class="h-4 w-4 text-red-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 9v4M12 17h.01" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+
+        <p class="min-w-0 flex-1 text-xs leading-snug sm:text-sm">
+          <b class="font-bold text-red-200">Alerta sísmica del sistema:</b>
+          {{ significant().length }}
+          @if (significant().length === 1) { sismo } @else { sismos }
+          de magnitud ≥ 6.
+          @if (topAlert(); as top) {
+            <span class="hidden sm:inline">
+              El más fuerte, <b>M{{ top.magnitude.toFixed(1) }}</b> en
+              {{ top.place }}.
+            </span>
+          }
+        </p>
+
+        @if (topAlert(); as top) {
+          <button
+            type="button"
+            (click)="onSelect(top.id)"
+            class="shrink-0 rounded-lg border border-red-400/60 bg-red-500/20 px-3 py-1 text-xs font-semibold text-red-100 transition-colors hover:bg-red-500/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-300/60"
+          >
+            Ver
+          </button>
+        }
+        <button
+          type="button"
+          (click)="dismissAlert()"
+          aria-label="Cerrar alerta"
+          class="shrink-0 rounded-lg p-1 text-red-200 transition-colors hover:bg-red-500/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-300/60"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+    }
+
     <!-- ============ Cuerpo ============ -->
     <div
       class="flex flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden"
