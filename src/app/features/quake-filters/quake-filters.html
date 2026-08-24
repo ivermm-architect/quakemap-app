@@ -1,0 +1,51 @@
+<section class="flex flex-col gap-4">
+  <div class="flex flex-col gap-1.5">
+    <label
+      for="range-select"
+      class="text-xs font-semibold uppercase tracking-wider text-brand-300"
+    >
+      Rango temporal
+    </label>
+    <select
+      id="range-select"
+      name="range"
+      [(ngModel)]="range"
+      class="rounded-lg border border-brand-700 bg-brand-800 px-3 py-2 text-sm text-brand-100 shadow-inner transition-colors hover:border-brand-300/60 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-300/40"
+    >
+      <option value="hour">Última hora</option>
+      <option value="day">Último día</option>
+      <option value="week">Última semana</option>
+    </select>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label
+      for="mag-range"
+      class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-brand-300"
+    >
+      <span>Magnitud mínima</span>
+      <span
+        class="rounded-md bg-brand-300 px-2 py-0.5 text-xs font-bold text-brand-950"
+      >
+        {{ minMag().toFixed(1) }}
+      </span>
+    </label>
+    <input
+      id="mag-range"
+      name="minMag"
+      type="range"
+      min="0"
+      max="8"
+      step="0.5"
+      [(ngModel)]="minMag"
+      [attr.aria-valuenow]="minMag()"
+      aria-valuemin="0"
+      aria-valuemax="8"
+      class="h-2 w-full cursor-pointer appearance-none rounded-full bg-brand-950 accent-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-300/40"
+    />
+    <div class="flex justify-between text-[10px] font-medium text-brand-300/70">
+      <span>0</span>
+      <span>8</span>
+    </div>
+  </div>
+</section>
