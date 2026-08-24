@@ -6,7 +6,7 @@ usando la API pública de **USGS**. Módulo I · Trabajo Final — Análisis, co
 ## Enlaces
 - **Repositorio:** https://github.com/ivermm-architect/quakemap-app
 - **App en Firebase:** https://quakemap-app.web.app
-- **Video explicativo:** _(añade aquí el enlace al video)_
+- **Video explicativo (Google Drive):** _(pega aquí el enlace compartido de Google Drive)_
 
 ## Capturas
 
