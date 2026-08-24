@@ -81,7 +81,13 @@ export class QuakeMap implements AfterViewInit, OnDestroy {
       center: [20, 0],
       zoom: 2,
       minZoom: 2,
-      worldCopyJump: true,
+      // Acota el mapa a un solo mundo: sin saltos ni océano vacío duplicado.
+      maxBounds: [
+        [-85, -180],
+        [85, 180],
+      ],
+      maxBoundsViscosity: 1,
+      worldCopyJump: false,
       attributionControl: true,
     });
 
