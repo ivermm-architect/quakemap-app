@@ -1,1 +1,106 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'tailwindcss';
+
+/* Tokens de marca QuakeMap: sistema azul marino (navy + sky). */
+@theme {
+  --color-brand-950: #0a1626; /* base / océano */
+  --color-brand-900: #0f2033; /* surface 1 (tierra, panels) */
+  --color-brand-800: #16304d; /* surface 2 (tarjetas, inputs) */
+  --color-brand-700: #1f4368; /* surface 3 / bordes */
+  --color-brand-300: #38bdf8; /* accent primario (sky) */
+  --color-brand-100: #e2f1ff; /* texto alto énfasis */
+
+  --color-brand: #38bdf8; /* primario */
+  --color-brand-accent: #38bdf8; /* acento */
+
+  --radius-lg: 0.75rem;
+
+  --font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  color: #e2f1ff;
+  font-family: var(--font-sans);
+}
+
+/* Fondo con profundidad: brillo azul sutil hacia la esquina superior. */
+body {
+  background:
+    radial-gradient(1100px 620px at 78% -12%, #143a5c 0%, transparent 58%),
+    radial-gradient(900px 500px at 0% 8%, #0f2033 0%, transparent 50%),
+    #0a1626;
+}
+
+/* ------- Scrollbar del sidebar (histórico) ------- */
+.quake-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #1f4368 transparent;
+}
+.quake-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.quake-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.quake-scroll::-webkit-scrollbar-thumb {
+  background: #1f4368;
+  border-radius: 9999px;
+}
+.quake-scroll::-webkit-scrollbar-thumb:hover {
+  background: #2a5885;
+}
+
+/* ------- Leaflet en tema oscuro ------- */
+.leaflet-container {
+  background: #0a1626; /* océano = tono base de la marca */
+  font-family: var(--font-sans);
+}
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  background: #0f2033;
+  color: #e2f1ff;
+  border-bottom-color: #16304d;
+}
+.leaflet-control-attribution {
+  background: rgba(15, 32, 51, 0.85) !important;
+  color: #7aa5c8 !important;
+}
+.leaflet-control-attribution a {
+  color: #38bdf8 !important;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #0f2033;
+  color: #e2f1ff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 0.6rem;
+}
+
+.quake-popup {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+.quake-popup a {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* Tooltip al pasar el cursor sobre un marcador. */
+.quake-tooltip {
+  background: #0f2033 !important;
+  color: #e2f1ff !important;
+  border: 1px solid #1f4368 !important;
+  border-radius: 0.4rem !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+  font-weight: 500;
+}
+.quake-tooltip::before {
+  border-top-color: #1f4368 !important;
+}
