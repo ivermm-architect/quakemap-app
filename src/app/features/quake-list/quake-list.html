@@ -1,0 +1,48 @@
+<ul class="divide-y divide-brand-800/60">
+  @for (q of quakes(); track q.id) {
+    <li>
+      <button
+        type="button"
+        [attr.data-id]="q.id"
+        [attr.aria-current]="q.id === selectedId() ? 'true' : null"
+        (click)="select.emit(q.id)"
+        class="flex w-full items-center gap-3 border-l-2 px-4 py-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-300"
+        [class]="
+          q.id === selectedId()
+            ? 'border-brand-300 bg-brand-800'
+            : 'border-transparent hover:border-brand-700 hover:bg-brand-800/50'
+        "
+      >
+        <span
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-brand-950 shadow-md ring-2 ring-black/10"
+          [style.background-color]="magColor(q.magnitude)"
+        >
+          {{ q.magnitude.toFixed(1) }}
+        </span>
+        <span class="min-w-0 flex-1">
+          <span class="block truncate text-sm font-medium text-brand-100">
+            {{ q.place }}
+          </span>
+          <span class="mt-0.5 block text-xs text-brand-300">
+            {{ formatTime(q.time) }} · {{ q.depth.toFixed(0) }} km
+          </span>
+        </span>
+        <svg
+          class="h-4 w-4 shrink-0 transition-colors"
+          [class]="q.id === selectedId() ? 'text-brand-300' : 'text-brand-700'"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </li>
+  } @empty {
+    <li class="px-4 py-10 text-center text-sm text-brand-300">
+      No hay sismos que coincidan con el filtro.
+    </li>
+  }
+</ul>
