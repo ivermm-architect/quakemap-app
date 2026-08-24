@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+
+/* Panel de marca: degradado navy en diagonal. */
+.hero-gradient {
+  background:
+    radial-gradient(120% 80% at 80% 20%, rgba(56, 189, 248, 0.12), transparent 60%),
+    linear-gradient(135deg, #0a1626 0%, #0f2033 45%, #16304d 100%);
+}
+
+/* Trazo sismográfico animado (se desplaza a la izquierda, "feed" en vivo). */
+.seismo-track {
+  animation: seismo-scroll 12s linear infinite;
+}
+
+@keyframes seismo-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Respeta preferencias de accesibilidad. */
+@media (prefers-reduced-motion: reduce) {
+  .seismo-track {
+    animation: none;
+  }
+}
