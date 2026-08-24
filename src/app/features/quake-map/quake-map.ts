@@ -55,6 +55,9 @@ export class QuakeMap implements AfterViewInit, OnDestroy {
 
   private highlighted?: { id: string; marker: L.CircleMarker };
 
+  /** Observa el tamaño del contenedor para revalidar el mapa al redimensionar. */
+  private resizeObserver?: ResizeObserver;
+
   constructor() {
     // Repinta cuando cambian los sismos (solo si el mapa ya existe).
     effect(() => {
@@ -110,11 +113,17 @@ export class QuakeMap implements AfterViewInit, OnDestroy {
 
     this.markers.addTo(this.map);
 
+    // Revalida el tamaño del mapa cuando su contenedor cambia (móvil↔escritorio,
+    // aparición del banner de alerta, etc.). Sin esto, Leaflet muestra zonas grises.
+    this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize());
+    this.resizeObserver.observe(this.mapEl().nativeElement);
+
     // Primer render con los datos disponibles.
     this.renderQuakes(this.quakes());
   }
 
   ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
     this.map?.remove();
   }
 

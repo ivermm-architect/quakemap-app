@@ -210,11 +210,11 @@
 
     <!-- ============ Cuerpo ============ -->
     <div
-      class="flex flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden"
+      class="flex flex-1 flex-col overflow-x-hidden overflow-y-auto lg:flex-row lg:overflow-hidden"
     >
       <!-- Sidebar: filtros + histórico -->
       <aside
-        class="flex w-full flex-col border-b border-brand-800/80 bg-brand-900/80 backdrop-blur-sm lg:w-96 lg:border-b-0 lg:border-r"
+        class="flex w-full min-w-0 flex-col border-b border-brand-800/80 bg-brand-900/80 backdrop-blur-sm lg:w-96 lg:shrink-0 lg:border-b-0 lg:border-r"
       >
         <!-- Filtros (tarjeta elevada) -->
         <div class="p-4">
@@ -317,7 +317,7 @@
       </aside>
 
       <!-- Mapa -->
-      <main class="relative min-h-80 flex-1 lg:min-h-0">
+      <main class="relative min-h-80 min-w-0 flex-1 overflow-hidden lg:min-h-0">
         <app-quake-map
           class="block h-80 w-full lg:h-full"
           [quakes]="filtered()"
