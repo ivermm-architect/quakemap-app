@@ -58,6 +58,9 @@ export class QuakeMap implements AfterViewInit, OnDestroy {
   /** Observa el tamaño del contenedor para revalidar el mapa al redimensionar. */
   private resizeObserver?: ResizeObserver;
 
+  /** Límites de un solo mundo (sin repeticiones ni océano vacío). */
+  private readonly worldBounds = L.latLngBounds([-85, -180], [85, 180]);
+
   constructor() {
     // Repinta cuando cambian los sismos (solo si el mapa ya existe).
     effect(() => {
@@ -82,10 +85,7 @@ export class QuakeMap implements AfterViewInit, OnDestroy {
       zoom: 2,
       minZoom: 2,
       // Acota el mapa a un solo mundo: sin saltos ni océano vacío duplicado.
-      maxBounds: [
-        [-85, -180],
-        [85, 180],
-      ],
+      maxBounds: this.worldBounds,
       maxBoundsViscosity: 1,
       worldCopyJump: false,
       attributionControl: true,
@@ -119,13 +119,31 @@ export class QuakeMap implements AfterViewInit, OnDestroy {
 
     this.markers.addTo(this.map);
 
-    // Revalida el tamaño del mapa cuando su contenedor cambia (móvil↔escritorio,
-    // aparición del banner de alerta, etc.). Sin esto, Leaflet muestra zonas grises.
-    this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize());
+    // El mundo debe cubrir siempre el contenedor (evita ver vacío al arrastrar).
+    this.coverWorld();
+
+    // Al cambiar el tamaño del contenedor (móvil↔escritorio, banner de alerta…)
+    // recalcula el zoom mínimo de cobertura y revalida el mapa.
+    this.resizeObserver = new ResizeObserver(() => this.coverWorld());
     this.resizeObserver.observe(this.mapEl().nativeElement);
 
     // Primer render con los datos disponibles.
     this.renderQuakes(this.quakes());
+  }
+
+  /**
+   * Fija el zoom mínimo para que el mundo cubra por completo el contenedor
+   * (efecto "cover"). Así el viewport siempre queda dentro del mapa y no se
+   * revela vacío al arrastrar, ni quedan franjas de océano a los lados.
+   */
+  private coverWorld(): void {
+    if (!this.map) return;
+    this.map.invalidateSize();
+    const coverZoom = this.map.getBoundsZoom(this.worldBounds, true);
+    this.map.setMinZoom(coverZoom);
+    if (this.map.getZoom() < coverZoom) {
+      this.map.setZoom(coverZoom);
+    }
   }
 
   ngOnDestroy(): void {
