@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   OnDestroy,
+  afterNextRender,
   effect,
   inject,
   input,
@@ -77,6 +78,10 @@ export class QuakeMap implements AfterViewInit, OnDestroy {
         this.focusQuake(id);
       }
     });
+
+    // Tras el primer render del DOM (layout ya calculado), revalida el tamaño:
+    // evita que Leaflet quede con un ancho obsoleto dentro del contenedor flex.
+    afterNextRender(() => this.coverWorld());
   }
 
   ngAfterViewInit(): void {
@@ -138,11 +143,13 @@ export class QuakeMap implements AfterViewInit, OnDestroy {
    */
   private coverWorld(): void {
     if (!this.map) return;
-    this.map.invalidateSize();
+    this.map.invalidateSize({ animate: false });
     const coverZoom = this.map.getBoundsZoom(this.worldBounds, true);
-    this.map.setMinZoom(coverZoom);
+    if (this.map.getMinZoom() !== coverZoom) {
+      this.map.setMinZoom(coverZoom);
+    }
     if (this.map.getZoom() < coverZoom) {
-      this.map.setZoom(coverZoom);
+      this.map.setZoom(coverZoom, { animate: false });
     }
   }
 
