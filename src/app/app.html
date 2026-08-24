@@ -88,11 +88,8 @@
                 {{ initials() }}
               </span>
             }
-            <span class="hidden max-w-[10rem] truncate text-xs font-medium text-brand-100 sm:inline">
-              {{ displayName() }}
-            </span>
             <svg
-              class="hidden h-4 w-4 text-brand-300 transition-transform sm:block"
+              class="h-4 w-4 text-brand-300 transition-transform"
               [class.rotate-180]="menuOpen()"
               viewBox="0 0 24 24"
               fill="none"
